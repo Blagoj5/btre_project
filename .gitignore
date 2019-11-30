@@ -115,3 +115,7 @@ dmypy.json
 venv
 .vscode/
 /static
+
+
+# FOR NOW BECAuse OF PASSWORD
+btre/settings.py
