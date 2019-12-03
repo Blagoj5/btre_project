@@ -29,7 +29,7 @@
               <img class="card-img-top" src="{{ listing.photo_main.url }}" alt="">
               <div class="card-img-overlay">
                 <h2>
-                  <span class="badge badge-secondary text-white">{{ listing.price | intcomma }}</span>
+                  <span class="badge badge-secondary text-white">${{ listing.price | intcomma }}</span>
                 </h2>
               </div>
               <div class="card-body">
@@ -71,8 +71,6 @@
           <p>No listings available</p>
         </div>
         {% endif %}
-       
-
       </div>
 
       <div class="row">
