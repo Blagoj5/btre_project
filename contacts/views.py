@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.core.mail import send_mail
 from .models import Contacts
 
 def contact(request):
@@ -13,9 +14,25 @@ def contact(request):
         user_id = request.POST['user_id']
         realtor_email = request.POST['realtor_email']
 
-        #  THIS automatically does the .save()
+        # Check if user has made inquiry already
+        if request.user.is_authenticated:
+            user_id = request.user.id
+            has_contacted = Contacts.objects.filter(listing_id=listing_id, user_id=user_id)
+            if has_contacted:
+                messages.error(request, 'You have already made an inquiry for this listing')
+                return redirect('/listings/'+listing_id) 
+
+        # THIS automatically does the .save()
         contact = Contacts.objects.create(listing_id=listing_id, listing=listing, name=name, email=email,
         phone=phone, message=message, user_id=user_id)
+
+        send_mail(
+            'Propery Listing Inquiry',
+            'There has been an inquiry for ' + listing + '. Sign in to admin panel for more info',
+            'baze.ytmusic@gmail.com',
+            [realtor_email, 'bazeto25@gmail.com'],
+            fail_silently=False
+        )
 
         messages.success(request, 'Your request has been submitted, a realtor will get back to you soon')
 
